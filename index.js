@@ -8,9 +8,9 @@ app.use(express.json());
 
 let todos = [];
 
-app.get('/todos', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Welcome to Naman’s Todo API! /todos');
-    res.json(todos);
+    //res.json(todos);
 });
 
 app.post('/todos', (req, res) => {
