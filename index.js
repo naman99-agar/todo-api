@@ -9,7 +9,7 @@ app.use(express.json());
 let todos = [];
 
 app.get('/todos', (req, res) => {
-    res.send('Welcome to Naman’s Todo API!');
+    res.send('Welcome to Naman’s Todo API! /todos');
     res.json(todos);
 });
 
