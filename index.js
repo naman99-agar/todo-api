@@ -15,26 +15,38 @@ app.get('/todos', (req, res) => {
 
 app.post('/todos', (req, res) => {
   const newTodo = { id: Date.now(), task: req.body.task };
-  todos.push(newTodo);
+  todos.push(newTodo);git
   res.status(201).json(newTodo);
 });
 
 app.put('/todos/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const index = todos.findIndex(todo => todo.id === id);
-  if (index !== -1) {
-    todos[index].task = req.body.task;
-    res.json(todos[index]);
-  } else {
-    res.status(404).json({ message: 'Todo not found' });
-  }
-});
+    const id = parseInt(req.params.id);
+    const { title, completed } = req.body;
+  
+    const todo = todos.find(t => t.id === id);
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+  
+    if (title !== undefined) todo.title = title;
+    if (completed !== undefined) todo.completed = completed;
+  
+    res.json(todo);
+  });
+  
 
-app.delete('/todos/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  todos = todos.filter(todo => todo.id !== id);
-  res.status(204).send();
-});
+  app.delete('/todos/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = todos.findIndex(t => t.id === id);
+  
+    if (index === -1) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+  
+    todos.splice(index, 1);
+    res.json({ message: 'Todo deleted' });
+  });
+  
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
