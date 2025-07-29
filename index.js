@@ -1,13 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 let todos = [];
 
 app.get('/todos', (req, res) => {
-  res.json(todos);
+    res.send('Welcome to Naman’s Todo API!');
+    res.json(todos);
 });
 
 app.post('/todos', (req, res) => {
