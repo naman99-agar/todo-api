@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs').promises;
 const app = express();
-const port = 4800;
+const port = process.env.PORT || 4800;
 
 const DATA_FILE = 'todos.json';
 
@@ -82,4 +82,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
