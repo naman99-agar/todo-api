@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 const app = express();
 const port = process.env.PORT || 4800;
 
+
 const DATA_FILE = 'todos.json';
 
 app.use(cors());
@@ -25,19 +26,33 @@ async function writeTodos(todos) {
 }
 
 // Create Todo
+// Create Todo with date
 app.post('/todos', async (req, res) => {
-  const todos = await readTodos();
-  const newTodo = { id: Date.now(), task: req.body.task };
-  todos.push(newTodo);
-  await writeTodos(todos);
-  res.status(201).json(newTodo);
-});
+    const todos = await readTodos();
+    const newTodo = {
+      id: Date.now(),
+      task: req.body.task,
+      date: req.body.date || new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    };
+    todos.push(newTodo);
+    await writeTodos(todos);
+    res.status(201).json(newTodo);
+  });
+    
 
-// Get All Todos
+// Get All Todos or Filter by date
 app.get('/todos', async (req, res) => {
-  const todos = await readTodos();
-  res.json(todos);
-});
+    const todos = await readTodos();
+    const { date } = req.query;
+  
+    if (date) {
+      const filtered = todos.filter(t => t.date === date);
+      res.json(filtered);
+    } else {
+      res.json(todos);
+    }
+  });
+  
 
 // Get Todo by ID
 app.get('/todos/:id', async (req, res) => {
